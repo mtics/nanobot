@@ -192,6 +192,7 @@ class ProvidersConfig(BaseModel):
     moonshot: ProviderConfig = Field(default_factory=ProviderConfig)
     minimax: ProviderConfig = Field(default_factory=ProviderConfig)
     aihubmix: ProviderConfig = Field(default_factory=ProviderConfig)  # AiHubMix API gateway
+    siliconflow: ProviderConfig = Field(default_factory=ProviderConfig)  # SiliconFlow (硅基流动)
     openai_codex: ProviderConfig = Field(default_factory=ProviderConfig)  # OpenAI Codex (OAuth)
 
 
@@ -217,6 +218,15 @@ class ExecToolConfig(BaseModel):
     timeout: int = 60
 
 
+class BrowserToolConfig(BaseModel):
+    """Optional browser automation (Playwright) configuration."""
+    enabled: bool = False
+    headless: bool = True
+    timeout_ms: int = 30000
+    proxy_server: str = ""  # e.g. "http://127.0.0.1:7890" or "socks5://..."
+    storage_state_path: str = ""  # default: workspace/browser/cookie.json when empty
+
+
 class MCPServerConfig(BaseModel):
     """MCP server connection configuration (stdio or HTTP)."""
     command: str = ""  # Stdio: command to run (e.g. "npx")
@@ -229,6 +239,7 @@ class ToolsConfig(BaseModel):
     """Tools configuration."""
     web: WebToolsConfig = Field(default_factory=WebToolsConfig)
     exec: ExecToolConfig = Field(default_factory=ExecToolConfig)
+    browser: BrowserToolConfig = Field(default_factory=BrowserToolConfig)
     restrict_to_workspace: bool = False  # If true, restrict all tool access to workspace directory
     mcp_servers: dict[str, MCPServerConfig] = Field(default_factory=dict)
 
